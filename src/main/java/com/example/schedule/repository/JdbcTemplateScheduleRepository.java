@@ -3,14 +3,18 @@ package com.example.schedule.repository;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -22,6 +26,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    // 일정 생성
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
 
@@ -39,6 +44,28 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
 
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return new ScheduleResponseDto(key.longValue(), schedule.getAuthor(), schedule.getPassword(), schedule.getTask(), now, now);
+        return new ScheduleResponseDto(key.longValue(), schedule.getAuthor(), schedule.getTask(), now, now);
+    }
+
+    // 전체 일정 조회
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules() {
+        return jdbcTemplate.query("select id, author, task, created_at, updated_at from schedule", scheduleRowMapper());
+    }
+
+
+    private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
+        return new RowMapper<ScheduleResponseDto>() {
+            @Override
+            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new ScheduleResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("author"),
+                        rs.getString("task"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getTimestamp("updated_at").toLocalDateTime()
+                );
+            }
+        };
     }
 }
