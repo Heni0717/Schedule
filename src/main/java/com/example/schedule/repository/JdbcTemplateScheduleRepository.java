@@ -2,11 +2,13 @@ package com.example.schedule.repository;
 
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class JdbcTemplateScheduleRepository implements ScheduleRepository{
@@ -50,8 +53,26 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
     // 전체 일정 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
-        return jdbcTemplate.query("select id, author, task, created_at, updated_at from schedule", scheduleRowMapper());
+        return jdbcTemplate.query("select * from schedule", scheduleRowMapper());
     }
+
+    // 일정 조회(id값)
+    @Override
+    public Optional<Schedule> findScheduleById(Long id) {
+        List<Schedule> result = jdbcTemplate.query("select * from schedule where id = ?", scheduleRowMapper2(), id);
+        return result.stream().findAny();
+    }
+
+    @Override
+    public Schedule findScheduleByIdOrElseThrow(Long id) {
+        List<Schedule> result = jdbcTemplate.query("select * from schedule where id = ?", scheduleRowMapper2(), id);
+        return result.stream().findAny().orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id =" + id));
+    }
+
+
+
+
 
 
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
@@ -61,6 +82,22 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
                 return new ScheduleResponseDto(
                         rs.getLong("id"),
                         rs.getString("author"),
+                        rs.getString("task"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getTimestamp("updated_at").toLocalDateTime()
+                );
+            }
+        };
+    }
+
+    private RowMapper<Schedule> scheduleRowMapper2(){
+        return new RowMapper<Schedule>() {
+            @Override
+            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Schedule(
+                        rs.getLong("id"),
+                        rs.getString("author"),
+                        null,
                         rs.getString("task"),
                         rs.getTimestamp("created_at").toLocalDateTime(),
                         rs.getTimestamp("updated_at").toLocalDateTime()
