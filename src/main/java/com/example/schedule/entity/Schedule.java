@@ -1,24 +1,19 @@
 package com.example.schedule.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class Schedule {
 
     private Long id;
-    private String author;
-    private String password;
     private String task;
+    private String password;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+    private Long userId;
 
-    public Schedule(String author, String password, String task) {
-        this.author = author;
-        this.password = password;
-        this.task = task;
-    }
 }
