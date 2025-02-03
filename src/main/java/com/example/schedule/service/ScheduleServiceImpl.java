@@ -1,10 +1,13 @@
 package com.example.schedule.service;
 
 import com.example.schedule.dto.ScheduleRequestDto;
+import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -27,12 +30,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.createSchedule(schedule);
     }
 
-//    // 전체 일정 조회
-//    @Override
-//    public List<ScheduleResponseDto> findAllSchedules() {
-//        return scheduleRepository.findAllSchedules();
-//    }
-//
+    // 전체 일정 조회
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules() {
+        return scheduleRepository.findAllSchedules();
+    }
+
 //    // 일정 조회(id값)
 //    @Override
 //    public ScheduleResponseDto findScheduleById(Long id) {

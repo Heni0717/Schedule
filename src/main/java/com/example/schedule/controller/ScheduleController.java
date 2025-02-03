@@ -1,13 +1,13 @@
 package com.example.schedule.controller;
 
 import com.example.schedule.dto.ScheduleRequestDto;
+import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -30,12 +30,17 @@ public class ScheduleController {
         }
     }
 
-//    // 전체 일정 조회
-//    @GetMapping
-//    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(){
-//        return new ResponseEntity<>(scheduleService.findAllSchedules(), HttpStatus.OK);
-//    }
-//
+    // 전체 일정 조회
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(){
+        try {
+            List<ScheduleResponseDto> schedules = scheduleService.findAllSchedules();
+            return ResponseEntity.ok(schedules);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 //    // 일정 조회(id값)
 //    @GetMapping("/{id}")
 //    public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id){
