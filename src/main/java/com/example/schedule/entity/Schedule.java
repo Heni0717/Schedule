@@ -1,12 +1,14 @@
 package com.example.schedule.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class Schedule {
 
     private Long id;

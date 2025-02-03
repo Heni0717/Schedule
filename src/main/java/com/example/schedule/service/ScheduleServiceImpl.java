@@ -1,15 +1,13 @@
 package com.example.schedule.service;
 
 import com.example.schedule.dto.ScheduleRequestDto;
-import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ScheduleServiceImpl implements ScheduleService{
+public class ScheduleServiceImpl implements ScheduleService {
 
     private ScheduleRepository scheduleRepository;
 
@@ -18,24 +16,27 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     // 일정 생성
+    @Transactional
     @Override
-    public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
-
-        Schedule schedule = new Schedule(dto.getAuthor(), dto.getPassword(), dto.getTask());
-
-        return scheduleRepository.saveSchedule(schedule);
+    public void createSchedule(ScheduleRequestDto dto) {
+        Schedule schedule = Schedule.builder()
+                .task(dto.getTask())
+                .password(dto.getPassword())
+                .userId((long) dto.getUserId())
+                .build();
+        scheduleRepository.createSchedule(schedule);
     }
 
-    // 전체 일정 조회
-    @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
-        return scheduleRepository.findAllSchedules();
-    }
-
-    // 일정 조회(id값)
-    @Override
-    public ScheduleResponseDto findScheduleById(Long id) {
-        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
-        return new ScheduleResponseDto(schedule);
-    }
+//    // 전체 일정 조회
+//    @Override
+//    public List<ScheduleResponseDto> findAllSchedules() {
+//        return scheduleRepository.findAllSchedules();
+//    }
+//
+//    // 일정 조회(id값)
+//    @Override
+//    public ScheduleResponseDto findScheduleById(Long id) {
+//        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+//        return new ScheduleResponseDto(schedule);
+//    }
 }
