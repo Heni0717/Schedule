@@ -32,7 +32,7 @@ public class ScheduleController {
 
     // 전체 일정 조회
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(){
+    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules() {
         try {
             List<ScheduleResponseDto> schedules = scheduleService.findAllSchedules();
             return ResponseEntity.ok(schedules);
@@ -41,10 +41,47 @@ public class ScheduleController {
         }
     }
 
-//    // 일정 조회(id값)
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id){
-//        return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
-//    }
+    // 단건 조회: id
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findScheduleById(@PathVariable int id) {
+        try {
+            ScheduleResponseDto dto = scheduleService.findScheduleById(id);
+            return ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("일정 조회 실패: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("일정 조회 실패");
+        }
+    }
+
+    // 다건 조회: 작성자 GET /schedules/users/name/{userName}
+    @GetMapping("/users/name/{userName}")
+    public ResponseEntity<?> findSchedulesByUserName(@PathVariable String userName) {
+        try {
+            List<ScheduleResponseDto> dtos = scheduleService.findSchedulesByUserName(userName);
+            return ResponseEntity.ok(dtos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("일정 조회 실패: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("일정 조회 실패");
+        }
+    }
+
+    // 다건 조회: 수정일 GET /schedules/updated/{updatedDate}
+    // updatedDate는 "yyyy-MM-dd" 형식의 문자열 (예: 2025-02-03)
+    @GetMapping("/updated/{updatedAt}")
+    public ResponseEntity<?> findSchedulesByUpdatedDate(@PathVariable String updatedAt) {
+        try {
+            List<ScheduleResponseDto> dtos = scheduleService.findSchedulesByUpdatedDate(updatedAt);
+            return ResponseEntity.ok(dtos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("일정 조회 실패: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("일정 조회 실패");
+        }
+    }
 
 }

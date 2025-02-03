@@ -9,6 +9,8 @@ public interface ScheduleService {
 
     void createSchedule(ScheduleRequestDto dto);
     List<ScheduleResponseDto> findAllSchedules();
-//    ScheduleResponseDto findScheduleById(Long id);
+    ScheduleResponseDto findScheduleById(int id);
+    List<ScheduleResponseDto> findSchedulesByUserName(String userName);
+    List<ScheduleResponseDto> findSchedulesByUpdatedDate(String updatedAt);
 
 }

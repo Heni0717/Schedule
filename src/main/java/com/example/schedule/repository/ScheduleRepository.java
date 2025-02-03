@@ -9,7 +9,8 @@ public interface ScheduleRepository {
 
     int createSchedule(Schedule schedule);
     List<ScheduleResponseDto> findAllSchedules();
-//    Schedule findScheduleByIdOrElseThrow(Long id);
-//    Optional<Schedule> findScheduleById(Long id);
+    ScheduleResponseDto findScheduleById(int id);
+    List<ScheduleResponseDto> findSchedulesByUserName(String userName);
+    List<ScheduleResponseDto> findSchedulesByUpdatedDate(String updatedAt);
 
 }
