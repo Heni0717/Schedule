@@ -2,12 +2,14 @@ package com.example.schedule.controller;
 
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
+import com.example.schedule.dto.ScheduleUpdateRequestDto;
 import com.example.schedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/schedules")
@@ -70,7 +72,6 @@ public class ScheduleController {
     }
 
     // 다건 조회: 수정일 GET /schedules/updated/{updatedDate}
-    // updatedDate는 "yyyy-MM-dd" 형식의 문자열 (예: 2025-02-03)
     @GetMapping("/updated/{updatedAt}")
     public ResponseEntity<?> findSchedulesByUpdatedDate(@PathVariable String updatedAt) {
         try {
@@ -81,6 +82,35 @@ public class ScheduleController {
                     .body("일정 조회 실패: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("일정 조회 실패");
+        }
+    }
+
+    // 수정
+    @PutMapping("/update")
+    public ResponseEntity<?> updateSchedule(@RequestBody ScheduleUpdateRequestDto dto){
+        try {
+            scheduleService.updateSchedule(dto);
+            return ResponseEntity.ok("수정 완료");
+        } catch(IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("수정 실패: " + e.getMessage());
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
+        }
+    }
+
+    // 삭제
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<?> deleteSchedule(@PathVariable int scheduleId, @RequestBody Map<String, String> body) {
+        String password = body.get("password");
+        try {
+            scheduleService.deleteSchedule(scheduleId, password);
+            return ResponseEntity.ok("삭제 성공");
+        } catch(IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("삭제 실패: " + e.getMessage());
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
         }
     }
 

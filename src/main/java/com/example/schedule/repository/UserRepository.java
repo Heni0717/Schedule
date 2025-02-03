@@ -4,4 +4,5 @@ import com.example.schedule.entity.UserInfo;
 
 public interface UserRepository {
     int createUserInfo(UserInfo userinfo);
+    int updateUserName(int id, String updateName);
 }

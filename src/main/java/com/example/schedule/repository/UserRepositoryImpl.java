@@ -19,4 +19,10 @@ public class UserRepositoryImpl implements UserRepository{
                 " values (?, ?, current_timestamp, current_timestamp)";
         return jdbcTemplate.update(sql, userinfo.getName(), userinfo.getEmail());
     }
+
+    @Override
+    public int updateUserName(int id, String updateName) {
+        String sql = "UPDATE userInfo SET name = ?, updated_at = current_timestamp WHERE id = ?";
+        return jdbcTemplate.update(sql, updateName, id);
+    }
 }

@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -81,5 +82,24 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return jdbcTemplate.query(sql, scheduleRowMapper, updatedAt);
     }
 
+    // 비밀번호 검증
+    @Override
+    public Map<String, Object> checkPassword(int id) {
+        String sql = "SELECT password, user_id FROM schedule WHERE id = ?";
+        return jdbcTemplate.queryForMap(sql, id);
+    }
 
+    // 일정 수정: task
+    @Override
+    public int updateScheduleTask(int id, String updateTask) {
+        String sql = "UPDATE schedule SET task = ?, updated_at = current_timestamp WHERE id = ?";
+        return jdbcTemplate.update(sql, updateTask, id);
+    }
+
+    // 일정 삭제
+    @Override
+    public int deleteSchedule(int id, String password) {
+        String sql = "DELETE FROM schedule WHERE id = ? AND password = ?";
+        return jdbcTemplate.update(sql, id, password);
+    }
 }
