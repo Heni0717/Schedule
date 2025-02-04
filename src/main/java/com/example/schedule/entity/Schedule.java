@@ -14,8 +14,8 @@ public class Schedule {
     private Long id;
     private String task;
     private String password;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private Long userId;
 
 }

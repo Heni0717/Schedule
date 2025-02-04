@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ScheduleUpdateRequestDto {
+
     private final int id;
     private final String updateTask;
     private final String updateUserName;

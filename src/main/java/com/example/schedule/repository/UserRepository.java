@@ -3,6 +3,8 @@ package com.example.schedule.repository;
 import com.example.schedule.entity.UserInfo;
 
 public interface UserRepository {
+
     int createUserInfo(UserInfo userinfo);
-    int updateUserName(int id, String updateName);
+    int updateUserName(Long id, String updateName);
+
 }

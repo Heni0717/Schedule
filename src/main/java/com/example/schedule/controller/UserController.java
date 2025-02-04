@@ -2,6 +2,7 @@ package com.example.schedule.controller;
 
 import com.example.schedule.dto.UserInfoRequestDto;
 import com.example.schedule.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class UserController {
 
     // User 생성
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody UserInfoRequestDto dto){
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserInfoRequestDto dto){
         try {
             userService.createUser(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("사용자 등록 성공");

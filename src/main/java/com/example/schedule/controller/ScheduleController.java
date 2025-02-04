@@ -4,6 +4,7 @@ import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.dto.ScheduleUpdateRequestDto;
 import com.example.schedule.service.ScheduleService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class ScheduleController {
 
     // 일정 생성
     @PostMapping
-    public ResponseEntity<String> createSchedule(@RequestBody ScheduleRequestDto dto) {
+    public ResponseEntity<String> createSchedule(@Valid @RequestBody ScheduleRequestDto dto) {
         try {
             scheduleService.createSchedule(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("일정 생성 성공");
@@ -32,7 +33,8 @@ public class ScheduleController {
         }
     }
 
-    // 전체 일정 조회
+    // 일정 조회 기능
+    // 전체 조회
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules() {
         try {
@@ -57,7 +59,7 @@ public class ScheduleController {
         }
     }
 
-    // 다건 조회: 작성자 GET /schedules/users/name/{userName}
+    // 다건 조회: 작성자
     @GetMapping("/users/name/{userName}")
     public ResponseEntity<?> findSchedulesByUserName(@PathVariable String userName) {
         try {
@@ -71,7 +73,7 @@ public class ScheduleController {
         }
     }
 
-    // 다건 조회: 수정일 GET /schedules/updated/{updatedDate}
+    // 다건 조회: 수정일 기준 기간 조회
     @GetMapping("/updated")
     public ResponseEntity<?> findSchedulesByUpdatedDate(@RequestParam String startDate, @RequestParam String endDate) {
         try {
@@ -85,7 +87,7 @@ public class ScheduleController {
         }
     }
 
-    // 수정
+    // 일정 수정
     @PutMapping("/update")
     public ResponseEntity<?> updateSchedule(@RequestBody ScheduleUpdateRequestDto dto){
         try {
@@ -99,7 +101,7 @@ public class ScheduleController {
         }
     }
 
-    // 삭제
+    // 일정 삭제
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<?> deleteSchedule(@PathVariable int scheduleId, @RequestBody Map<String, String> body) {
         String password = body.get("password");

@@ -4,7 +4,6 @@ import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ScheduleRepository {
 
@@ -13,7 +12,8 @@ public interface ScheduleRepository {
     ScheduleResponseDto findScheduleById(int id);
     List<ScheduleResponseDto> findSchedulesByUserName(String userName);
     List<ScheduleResponseDto> findSchedulesByUpdatedDate(String startDate, String endDate);
-    Map<String, Object> checkPassword(int id);
     int updateScheduleTask(int id, String updateTask);
     int deleteSchedule(int id, String password);
+    Schedule findById(int id);
+
 }

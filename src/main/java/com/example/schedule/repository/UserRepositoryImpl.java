@@ -12,16 +12,17 @@ public class UserRepositoryImpl implements UserRepository{
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // User 생성
     @Override
     public int createUserInfo(UserInfo userinfo) {
-
         String sql = "insert into userInfo (name, email, created_at, updated_at)" +
                 " values (?, ?, current_timestamp, current_timestamp)";
         return jdbcTemplate.update(sql, userinfo.getName(), userinfo.getEmail());
     }
 
+    // 일정 수정: UserName
     @Override
-    public int updateUserName(int id, String updateName) {
+    public int updateUserName(Long id, String updateName) {
         String sql = "UPDATE userInfo SET name = ?, updated_at = current_timestamp WHERE id = ?";
         return jdbcTemplate.update(sql, updateName, id);
     }
