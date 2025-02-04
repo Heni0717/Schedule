@@ -72,10 +72,10 @@ public class ScheduleController {
     }
 
     // 다건 조회: 수정일 GET /schedules/updated/{updatedDate}
-    @GetMapping("/updated/{updatedAt}")
-    public ResponseEntity<?> findSchedulesByUpdatedDate(@PathVariable String updatedAt) {
+    @GetMapping("/updated")
+    public ResponseEntity<?> findSchedulesByUpdatedDate(@RequestParam String startDate, @RequestParam String endDate) {
         try {
-            List<ScheduleResponseDto> dtos = scheduleService.findSchedulesByUpdatedDate(updatedAt);
+            List<ScheduleResponseDto> dtos = scheduleService.findSchedulesByUpdatedDate(startDate, endDate);
             return ResponseEntity.ok(dtos);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

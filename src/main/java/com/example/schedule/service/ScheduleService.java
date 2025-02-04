@@ -12,7 +12,7 @@ public interface ScheduleService {
     List<ScheduleResponseDto> findAllSchedules();
     ScheduleResponseDto findScheduleById(int id);
     List<ScheduleResponseDto> findSchedulesByUserName(String userName);
-    List<ScheduleResponseDto> findSchedulesByUpdatedDate(String updatedAt);
+    List<ScheduleResponseDto> findSchedulesByUpdatedDate(String startDate, String endDate);
     void updateSchedule(ScheduleUpdateRequestDto dto);
     void deleteSchedule(int scheduleId, String password);
 

@@ -55,8 +55,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     // 수정일
     @Override
-    public List<ScheduleResponseDto> findSchedulesByUpdatedDate(String updatedAt) {
-        return scheduleRepository.findSchedulesByUpdatedDate(updatedAt);
+    public List<ScheduleResponseDto> findSchedulesByUpdatedDate(String startDate, String endDate) {
+        return scheduleRepository.findSchedulesByUpdatedDate(startDate, endDate);
     }
 
     // 일정 수정

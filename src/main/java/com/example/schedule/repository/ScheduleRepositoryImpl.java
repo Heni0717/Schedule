@@ -74,12 +74,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return jdbcTemplate.query(sql, scheduleRowMapper, userName);
     }
 
-    // 다건 조회 (수정일)
+    // 다건 조회 (수정일 조회)
     @Override
-    public List<ScheduleResponseDto> findSchedulesByUpdatedDate(String updatedAt) {
+    public List<ScheduleResponseDto> findSchedulesByUpdatedDate(String startDate, String endDate) {
         String sql = "SELECT s.*, u.name as user_name " +
-                "FROM schedule s JOIN userInfo u ON s.user_id = u.id WHERE DATE(s.updated_at) = ?";
-        return jdbcTemplate.query(sql, scheduleRowMapper, updatedAt);
+                "FROM schedule s JOIN userInfo u ON s.user_id = u.id WHERE DATE(s.updated_at) BETWEEN ? AND ? ORDER BY s.updated_at DESC";
+        return jdbcTemplate.query(sql, scheduleRowMapper, startDate, endDate);
     }
 
     // 비밀번호 검증
